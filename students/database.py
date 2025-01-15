@@ -1,12 +1,13 @@
 """Database Layer"""
-from sqlalchemy import Column, DateTime, Integer, String, Table, create_engine
+from sqlalchemy import (Column, DateTime, Integer, String, Table,
+                        create_engine, func)
 from sqlalchemy.orm import registry, sessionmaker
 
 from .models import Student
 
 DATABASE_URL = "sqlite:///local.db"
 
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(DATABASE_URL)
 
 Session = sessionmaker(bind=engine)
 
@@ -18,7 +19,7 @@ students = Table(
     mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
     Column("name", String(50)),
-    Column("created_at", DateTime)
+    Column("created_at", DateTime, default=func.now())
 )
 
 def get_session() -> Session:
